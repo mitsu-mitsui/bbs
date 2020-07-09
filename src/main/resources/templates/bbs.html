@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>木下組掲示板</title>
+<link rel="stylesheet" href="/css/bbs.css" th:href="@{/css/bbs.css}">
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+	<h1 style="color: red;">掲示板！</h1>
+	<form th:action="@{/insertArticle}" method="post" th:object="${articleForm}">
+		投稿者名:<input type="text" name="name" th:value="${session.name}"><span th:errors="*{name}" style="color: red;"></span><br>
+		投稿内容:<textarea rows="5" cols="30" name="content" th:field="*{content}"></textarea><span th:errors="*{content}" style="color: red;"></span>
+		<br>
+		<button>記事投稿</button>
+	</form>
+	<hr>
+	<div th:text="${noArticle}" style="color: red;"></div>
+	<div th:each="article:${articleList}">
+		投稿者名:<span th:text="${article.name}"></span><br>
+		投稿内容:<br>
+		<div class="content"
+			th:each="str: ${article.content.split('\r\n|\r|\n', -1)}" th:text="${str}">
+			<br>
+		</div><br>
+		<form th:action="@{/deleteArticle}" method="post">
+			<input type="hidden" name="articleId" th:value="${article.id}">
+			<button>記事削除</button>
+			<button type="button" class="fav" th:value="${article.id}">いいね!</button>
+			<span th:text="${article.fav}" th:id="'favNum'+${article.id}"></span>
+		</form><br>
+		<div th:each="comment:${article.commentList}" class="comment">
+			コメント者名:<span th:text="${comment.name}"></span><br>
+			コメント内容:<br>
+			<div class="content"
+				th:each="str: ${comment.content.split('\r\n|\r|\n', -1)}" th:text="${str}">
+				<br>
+			</div>
+			<form th:action="@{/deleteComment}" method="post">
+				<input type="hidden" name="commentId" th:value="${comment.id}">
+				<button>コメント削除</button>
+			</form>
+			<br>
+		</div>
+		<form th:action="@{/insertComment}" method="post" th:object="${commentForm}">
+			<input type="hidden" name="articleId" th:value="${article.id}">
+			名前:<span th:if="${article.id==commentForm.articleId}" th:errors="*{name}" style="color: red;"></span><br>
+			<input type="text" name="name" th:value="${session.name}"><br>
+			コメント:<span th:if="${article.id==commentForm.articleId}" th:errors="*{content}" style="color: red;"></span><br>
+			<textarea rows="5" cols="30" name="content" th:text="${article.id==commentForm.articleId}?${commentForm.content}:''"></textarea><br>
+			<input type="checkbox" name="isSage" value="true">sage<br>
+			<button>コメント投稿</button>
+		</form>
+		<hr>
+	</div>
+	<script th:src="@{/js/bbs.js}"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+@charset "UTF-8";
+.content{
+	font-size: small;
+	font-weight: bold;
+}
+
+.comment{
+	color: brown;
+}
