@@ -39,7 +39,8 @@ public class CommentRepository {
 	 */
 	public List<Comment> findByArticleId(Integer articleId) {
 
-		String sql = "SELECT id,name,content,article_id" + " FROM comments" + " WHERE article_id = :articleId ORDER BY id DESC;";
+		String sql = "SELECT id,name,content,article_id" + " FROM comments"
+				+ " WHERE article_id = :articleId ORDER BY id DESC;";
 
 		SqlParameterSource param = new MapSqlParameterSource().addValue("articleId", articleId);
 		List<Comment> commentList = template.query(sql, param, COMMENT_ROW_MAPPER);
@@ -56,11 +57,11 @@ public class CommentRepository {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(comment);
 
 		String sql = "INSERT INTO comments(name,content,article_id)" + " VALUES (:name,:content,:articleId);";
-		
+
 		template.update(sql, param);
 
 	}
-	
+
 	/**
 	 * 記事に対する全コメントを削除する．
 	 * 
@@ -73,4 +74,15 @@ public class CommentRepository {
 		template.update(sql, param);
 	}
 
+	/**
+	 * 消したいコメントを削除する．
+	 * 
+	 * @param commentId コメントのID
+	 */
+	public void deleteByCommentId(Integer commentId) {
+		String sql = "DELETE FROM comments WHERE id =:commentId";
+
+		SqlParameterSource param = new MapSqlParameterSource().addValue("commentId", commentId);
+		template.update(sql, param);
+	}
 }
