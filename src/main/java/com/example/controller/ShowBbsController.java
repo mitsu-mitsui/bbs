@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.Article;
 import com.example.form.ArticleForm;
+import com.example.form.CommentForm;
 import com.example.repository.ArticleRepository;
 
 /**
@@ -27,6 +28,11 @@ public class ShowBbsController {
 	@ModelAttribute
 	private ArticleForm setUpArticleForm() {
 		return new ArticleForm();
+	}
+
+	@ModelAttribute
+	private CommentForm setUpCommentForm() {
+		return new CommentForm();
 	}
 
 	/**
