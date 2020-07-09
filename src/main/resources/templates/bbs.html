@@ -47,7 +47,7 @@
 			名前:<span th:if="${article.id==commentForm.articleId}" th:errors="*{name}" style="color: red;"></span><br>
 			<input type="text" name="name" th:value="${session.name}"><br>
 			コメント:<span th:if="${article.id==commentForm.articleId}" th:errors="*{Content}" style="color: red;"></span><br>
-			<textarea rows="5" cols="30" name="Content" th:text="${article.id==commentForm.articleId}?${commentForm.content}:''"></textarea><br>
+			<textarea rows="5" cols="30" name="Content" th:text="${article.id==commentForm.articleId}?${commentForm.Content}:''"></textarea><br>
 			<input type="checkbox" name="isSage" value="true">sage<br>
 			<button>コメント投稿</button>
 		</form>
