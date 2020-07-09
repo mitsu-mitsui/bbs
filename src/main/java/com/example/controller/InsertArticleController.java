@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.Article;
+import com.example.domain.Comment;
 import com.example.form.ArticleForm;
 import com.example.form.CommentForm;
 import com.example.repository.ArticleRepository;
+import com.example.repository.CommentRepository;
 
 /**
  * 記事を投稿するコントローラー.
@@ -74,6 +76,29 @@ public class InsertArticleController {
 		Article article = new Article();
 		BeanUtils.copyProperties(articleForm, article);
 		articleRepository.insert(article);
+		return "redirect:/";
+	}
+
+	@Autowired
+	private CommentRepository commentRepository;
+
+	/**
+	 * コメントを投稿する．
+	 * 
+	 * @param form コメント投稿フォーム
+	 * @return 掲示板画面
+	 */
+	@RequestMapping("/insertComment")
+	public String insertComment(@Validated CommentForm form, BindingResult result, Model model) {
+		session.setAttribute("name", form.getName());
+		if (result.hasErrors()) {
+			return index(model);
+		}
+		Comment comment = new Comment();
+		BeanUtils.copyProperties(form, comment);
+
+		commentRepository.insert(comment);
+
 		return "redirect:/";
 	}
 
